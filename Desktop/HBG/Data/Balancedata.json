@@ -1,0 +1,63 @@
+{
+  "tickRate": 1,
+  "conversion": {
+    "F_to_P": 1000,
+    "P_to_PF": 1000,
+    "P_to_PC": 5000
+  },
+  "units": {
+    "U1": {
+      "baseProduction": 1,
+      "growthRate": 1.15
+    },
+    "U2": {
+      "baseProduction": 10,
+      "growthRate": 1.15
+    },
+    "U3": {
+      "baseProduction": 100,
+      "growthRate": 1.15
+    },
+    "U4": {
+      "baseProduction": 1000,
+      "growthRate": 1.15
+    },
+    "U5": {
+      "baseProduction": 10000,
+      "growthRate": 1.15
+    },
+    "U6": {
+      "baseProduction": 100000,
+      "growthRate": 1.15
+    },
+    "U7": {
+      "baseProduction": 1000000,
+      "growthRate": 1.15
+    },
+    "U8": {
+      "baseProduction": 10000000,
+      "growthRate": 1.15
+    },
+    "U9": {
+      "baseProduction": 100000000,
+      "growthRate": 1.5,
+      "resetOnUpgrade": true
+    }
+  },
+  "productionBonus": {
+    "per50Levels": 0.5,
+    "perPopeLevel": 0.01
+  },
+  "PF": {
+    "softCap1": 50,
+    "softCap2": 100,
+    "formula": "custom"
+  },
+  "PC": {
+    "formula": "sqrt(P / 5000)"
+  },
+  "sacrifice": {
+    "resets": ["units", "C", "F"],
+    "preserves": ["P", "PF", "PC"]
+  }
+}

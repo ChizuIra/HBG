@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>HBG - How to Become a God</title>
+  <style>
+    body { font-family: sans-serif; background: #f0f0f0; padding: 20px; }
+    h1, h2 { margin: 10px 0; }
+    .section { background: white; padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    button { padding: 5px 10px; margin: 5px; }
+  </style>
+</head>
+<body>
+  <h1>HBG - How to Become a God</h1>
+
+  <div class="section">
+    <h2>Ressources</h2>
+    <p><strong>Croyants (C):</strong> <span id="croyants">0</span></p>
+    <p><strong>Foi (F):</strong> <span id="foi">0</span></p>
+    <p><strong>Puissance (P):</strong> <span id="puissance">0</span></p>
+    <p><strong>Puissance de Foi (PF):</strong> <span id="pf">1</span>x</p>
+  </div>
+
+  <div class="section">
+    <h2>Générateurs de Croyants</h2>
+    <div>
+      <button onclick="acheterUnite('adepte')">Acheter Adepte (10F)</button>
+      <span id="adepte">0</span> Adeptes</div>
+  </div>
+
+  <div class="section">
+    <h2>Offrandes (F ➞ P)</h2>
+    <button onclick="convertirFEnP()">Faire une prière (1000F ➞ 1P)</button>
+  </div>
+
+  <script>
+    let croyants = 0;
+    let foi = 10;
+    let puissance = 0;
+    let pf = 1;
+
+    const unite = {
+      adepte: { cout: 10, nombre: 0, generation: 1 }
+    };
+
+    function updateDisplay() {
+      document.getElementById("croyants").textContent = Math.floor(croyants);
+      document.getElementById("foi").textContent = Math.floor(foi);
+      document.getElementById("puissance").textContent = Math.floor(puissance);
+      document.getElementById("pf").textContent = pf.toFixed(2);
+      document.getElementById("adepte").textContent = unite.adepte.nombre;
+    }
+
+    function tick() {
+      // Generation de Croyants
+      croyants += unite.adepte.nombre * unite.adepte.generation;
+      // Generation de Foi
+      foi += (croyants * 0.1 * pf);
+      updateDisplay();
+    }
+
+    function acheterUnite(type) {
+      const u = unite[type];
+      if (foi >= u.cout) {
+        foi -= u.cout;
+        u.nombre++;
+        u.cout = Math.floor(u.cout * 1.15);
+      }
+    }
+
+    function convertirFEnP() {
+      if (foi >= 1000) {
+        foi -= 1000;
+        puissance += 1;
+        // PF = P / 1000
+        pf = 1 + (puissance / 1000);
+      }
+    }
+
+    // Lancement du jeu
+    setInterval(tick, 1000);
+    updateDisplay();
+  </script>
+</body>
+</html>
