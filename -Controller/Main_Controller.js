@@ -10,79 +10,89 @@ import { acheterUnite } from "../-Model/Model_shop.js";
     }
 */
 
-//Main ressources 
-let F = 0;
-let C = 1;
-let CDispo = C;
+// Main ressources 
+var f = 0;
+var c = 1;
+var cDispo = c;
 
-const TabMC = [
-    { MinValue: 0, MaxValue: 50, CurrentValue: 0, MaxWorker: 10, CurrentWorker: 10 , Prod: 1 },
-    { MinValue: 0, MaxValue: 100, CurrentValue: 0, MaxWorker: 25, CurrentWorker: 0 , Prod: 5 }
+const tabMC = [
+    { minValue: 0, maxValue: 50, currentValue: 0, maxWorker: 10, currentWorker: 0, prod: 1 },
+    { minValue: 0, maxValue: 100, currentValue: 0, maxWorker: 25, currentWorker: 0, prod: 5 }
 ];
 
-console.log(TabMC);
-
 /////////////////////////////////////////////////
 
-for (let i = 0; i < TabMC.length; i++) {
-    document.getElementById("MC_" + i).setAttribute("max", TabMC[i].MaxValue);
-    document.getElementById("MC_" + i).setAttribute("value", TabMC[i].MinValue);
-    document.getElementById("MC_" + i + "_Allocated").textContent = TabMC[i].CurrentWorker;
+for (let i = 0; i < tabMC.length; i++) {
+    document.getElementById("MC_" + i).setAttribute("max", tabMC[i].maxValue);
+    document.getElementById("MC_" + i).setAttribute("value", tabMC[i].minValue);
+    document.getElementById("MC_" + i + "_Allocated").textContent = tabMC[i].currentWorker;
 
-    document.getElementById("MC_" + i + "_Btn+").onclick = function() {Disptach(i,"+")};
-    document.getElementById("MC_" + i + "_Btn-").onclick = function() {Disptach(i,"-")};
+    document.getElementById("MC_" + i + "_Btn+").onclick = function () { Dispatch(i, "+") };
+    document.getElementById("MC_" + i + "_Btn-").onclick = function () { Dispatch(i, "-") };
 }
 
-
-
 /////////////////////////////////////////////////
 
 
-function updateDisplay() { //Actualisation de l'affichage
-    //Actualisation des Ressources
-    document.getElementById("C").textContent = Math.floor(C);
-    document.getElementById("CDispo").textContent = Math.floor(CDispo);
-    document.getElementById("F").textContent = F.toFixed(2);
+function updateDisplay() {
+    // Actualisation des Ressources
+    document.getElementById("C").textContent = Math.floor(c);
+    document.getElementById("cDispo").textContent = Math.floor(cDispo);
+    document.getElementById("F").textContent = f.toFixed(2);
 
     // for (let i = 0; i < Tabunits.length; i++ ) {
-    for (let i = 0; i < TabMC.length; i++) {
-        document.getElementById("MC_" + i).setAttribute("value", TabMC[i].CurrentValue);
-        document.getElementById("MC_" + i + "_Allocated").textContent = TabMC[i].CurrentWorker;
+    for (let i = 0; i < tabMC.length; i++) {
+        document.getElementById("MC_" + i).setAttribute("value", tabMC[i].currentValue);
+        document.getElementById("MC_" + i + "_Allocated").textContent = tabMC[i].currentWorker;
     }
 }
 
-function MissionProgress(t){
-    for (let i = 0; i < TabMC.length; i++) {
-        if(TabMC[i].CurrentWorker > 0){
-            
-            TabMC[i].CurrentValue = TabMC[i].CurrentValue + (TabMC[i].CurrentWorker * t);
+/**
+ * Fonction permettant de calculer l'avancement des missions
+ * @param {Number} t Nombre utilisé pour représenté le tick dans le jeu
+ */
+function MissionProgress(t) {
+    for (let i = 0; i < tabMC.length; i++) {
+        if (tabMC[i].currentWorker > 0) {
 
-            if(TabMC[i].CurrentValue >= TabMC[i].MaxValue){
-                C += TabMC[i].Prod;
-                CDispo += TabMC[i].Prod;
-                TabMC[i].CurrentValue = 0;
+            tabMC[i].currentValue = tabMC[i].currentValue + (tabMC[i].currentWorker * t);
+
+            if (tabMC[i].currentValue >= tabMC[i].maxValue) {
+                c += tabMC[i].prod;
+                cDispo += tabMC[i].prod;
+                tabMC[i].currentValue = 0;
             }
-        } 
+        }
     }
 }
 
-function Disptach(i,Action){
-    var DispatchAmount = document.getElementById("DispatchAmount");
+/**
+ * Permet d'attribuer à la mission correspondante la valeur sélectionnée (+ ou -)
+ * @param {Number} mission Correspond à la mission sélectionnée (Equivalent à TabMC[i].
+ * @param {String} action Soit "+" soit "-", permet d'ajouter ou d'enlever à la mission i
+ */
+function Dispatch(mission, action) {
+    var dispatchAmount = Number(document.getElementById("dispatchAmount").value);
 
-    switch (Action){
-        case "+" :
-            if(Cdispo >= DispatchAmount){
-            TabMC[i].CurrentWorker = TabMC[i].CurrentWorker + DispatchAmount;
-            CDispo = CDispo - DispatchAmount;
+    if (dispatchAmount > 0) {
+        try {
+            switch (action) {
+                case "+":
+                    if (cDispo >= dispatchAmount) {
+                        tabMC[mission].currentWorker = tabMC[mission].currentWorker + dispatchAmount;
+                        cDispo = cDispo - dispatchAmount;
+                    }
+                    break;
+                case "-":
+                    tabMC[mission].currentWorker = tabMC[mission].currentWorker - dispatchAmount;
+                    cDispo = cDispo + dispatchAmount;
+                    break;
             }
-            break;
-        case "-" :
-            //if(){
-            TabMC[i].CurrentWorker = TabMC[i].CurrentWorker - DispatchAmount;
-            //}
-            break;
+        } catch (error) {
+            console.error(error);
+        }
     }
-    
+
 }
 
 function tick(t) {

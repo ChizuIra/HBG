@@ -1,50 +1,57 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <title>How to become a God</title>
   <link href="Style/main.css" rel="stylesheet" />
 
 </head>
+
 <body>
   <!-- On charge uniquement le fichier de démarrage -->
   <script type="module" src="-Controller/Main_Controller.js"></script>
 
   <h1>HBG - How to Become a God</h1>
 
-    <div class="section">
-        <h2>Ressources</h2>
-        <p><strong>F :</strong> <span id="F">0</span></p>
-        <p><strong>C :</strong> <span id="C">0</span></p>
-        <p><strong>Croyants Disponible :</strong> <span id="Cdispo">0</span></p>
+  <div class="section">
+    <h2>Ressources</h2>
+    <p><strong>F :</strong> <span id="F">0</span></p>
+    <p><strong>C :</strong> <span id="C">0</span></p>
+    <p><strong>Croyants Disponible :</strong> <span id="cDispo">0</span></p>
+  </div>
+
+  <div>
+    <label>Selection : </label>
+    <input id="dispatchAmount" type="number" min="0">
+  </div>
+
+  <div>
+
+    <hr>  
+    <nav Class="MissionsCroyant">
+      <br>
+
+
+      <label for="MC_0"> MC 0 </label>
+      <progress id="MC_0" max="0" value="0"></progress> <span id="MC_0_Allocated">0</span> <button id="MC_0_Btn+"> +
+      </button> <button id="MC_0_Btn-"> - </button>
+
+      
+      <br>
+
+
+      <label for="MC_1"> MC 1 </label>
+      <progress id="MC_1" max="0" value="0"></progress> <span id="MC_1_Allocated">0</span> <button id="MC_1_Btn+"> +
+      </button> <button id="MC_1_Btn-"> - </button>
+    </nav>
+
+    <div class="MissionsFoi">
+
     </div>
-
-    <div>
-      <label>Selection : </label>
-      <input id="DispatchAmount"type="number">
-    </div>
-
-    <div>
-      <nav Class="MissionsCroyant">
-        <br>
-
-
-        <label for="MC_0"> MC 0 </label>
-        <progress id="MC_0" max="0" value="0"></progress> <span id="MC_0_Allocated">0</span> <button id="MC_0_Btn+"> + </button> <button id="MC_0_Btn-"> - </button>
-        
-        
-        <br>
-
-
-        <label for="MC_1"> MC 1 </label>
-        <progress id="MC_1" max="0" value="0"></progress> <span id="MC_1_Allocated">0</span> <button id="MC_1_Btn+"> + </button> <button id="MC_1_Btn-"> - </button>
-      </nav>
-
-      <div class="MissionsFoi">
-
-      </div>
-    </div>
+  </div>
 
   </div>
 </body>
+
 </html>
