@@ -10,7 +10,7 @@ import { acheterUnite } from "../-Model/Model_shop.js";
     }
 */
 
-// Main ressources 
+// Main ressources
 var f = 0;
 var c = 1;
 var cDispo = c;
@@ -33,37 +33,52 @@ for (let i = 0; i < tabMC.length; i++) {
 
 /////////////////////////////////////////////////
 
+function assignWorker(ressource, quantity) {
+    ressource.currentWorker += quantity;
+    cDispo -= quantity;
+}
+
+function updateElement(id, value) {
+    document.getElementById(id).textContent = value;
+}
 
 function updateDisplay() {
     // Actualisation des Ressources
-    document.getElementById("C").textContent = Math.floor(c);
-    document.getElementById("cDispo").textContent = Math.floor(cDispo);
-    document.getElementById("F").textContent = f.toFixed(2);
+    updateElement("C",      Math.floor(c));
+    updateElement("cDispo", Math.floor(cDispo));
+    updateElement("F",      f.toFixed(2));
 
     // for (let i = 0; i < Tabunits.length; i++ ) {
     for (let i = 0; i < tabMC.length; i++) {
-        document.getElementById("MC_" + i).setAttribute("value", tabMC[i].currentValue);
-        document.getElementById("MC_" + i + "_Allocated").textContent = tabMC[i].currentWorker;
+        document.getElementById(`MC_${i}`).setAttribute("value", tabMC[i].currentValue);
+        updateElement(`MC_${i}_Allocated`, tabMC[i].currentWorker);
     }
 }
 
 /**
  * Fonction permettant de calculer l'avancement des missions
- * @param {Number} t Nombre utilisé pour représenté le tick dans le jeu
+ * @param {Number} t Nombre utilisé pour représenté le pas de temps depuis la dernière update
  */
 function MissionProgress(t) {
-    for (let i = 0; i < tabMC.length; i++) {
-        if (tabMC[i].currentWorker > 0) {
+    for(let currMc of tabMC) {
+        currMc.currentValue += currMc.currentWorker * t;
 
-            tabMC[i].currentValue = tabMC[i].currentValue + (tabMC[i].currentWorker * t);
+        if(currMc.currentValue < currMc.maxValue) return;
 
-            if (tabMC[i].currentValue >= tabMC[i].maxValue) {
-                c += tabMC[i].prod;
-                cDispo += tabMC[i].prod;
-                tabMC[i].currentValue = 0;
-            }
-        }
+        c += currMc.prod;
+        cDispo += currMc.prod;
+        currMc.currentValue = 0;
     }
+}
+
+/**
+ * Permet de restreindre une valeur entre 2 nombres
+ * @param{Number} Borne inférieur de la range
+ * @param{Number} Le nombre à borner
+ * @param{Number} Borne supérieur de la range
+ */
+function clamp(min, val, max) {
+    return Math.max(min, Math.min(val,max));
 }
 
 /**
@@ -72,39 +87,34 @@ function MissionProgress(t) {
  * @param {String} action Soit "+" soit "-", permet d'ajouter ou d'enlever à la mission i
  */
 function Dispatch(mission, action) {
-    var dispatchAmount = Number(document.getElementById("dispatchAmount").value);
+    var dispatchAmount = +(document.getElementById("dispatchAmount").value);
+    let current = tabMC[mission];
 
-    if (dispatchAmount > 0) {
-        try {
-            switch (action) {
-                case "+":
-                    if (cDispo >= dispatchAmount) {
-                        tabMC[mission].currentWorker = tabMC[mission].currentWorker + dispatchAmount;
-                        cDispo = cDispo - dispatchAmount;
-                    }
-                    break;
-                case "-":
-                    tabMC[mission].currentWorker = tabMC[mission].currentWorker - dispatchAmount;
-                    cDispo = cDispo + dispatchAmount;
-                    break;
-            }
-        } catch (error) {
-            console.error(error);
-        }
+    if(dispatchAmount <= 0) return;
+
+    dispatchAmount = clamp(
+        0,
+        dispatchAmount,
+        current.maxWorker - current.currentWorker
+    );
+
+    switch (action) {
+    case "+":
+	dispatchAmount = Math.min(dispatchAmount, cDispo); // Empeche de suracheter
+	assignWorker(current, dispatchAmount);
+        break;
+    case "-":
+	dispatchAmount = Math.min(dispatchAmount, current.currentWorker); // Empeche de survendre
+	assignWorker(current, -dispatchAmount);
+        break;
     }
-
 }
 
-function tick(t) {
-    MissionProgress(t);
-
-}
-
-
-updateDisplay([0, 0, []]); // Actualise l'interface avant de lancer la boucle.
-let inter_ms = 16.66666667// 16.66666667 = 60 fps
+updateDisplay(); // Actualise l'interface avant de lancer la boucle.
+let inter_ms = 1000 * 1/60; // 60 fps
 setInterval(() => {
-    updateDisplay(tick(inter_ms / 1000.0));
+    updateDisplay();
+    MissionProgress(inter_ms / 1000.0);
 }, inter_ms);
 
 
