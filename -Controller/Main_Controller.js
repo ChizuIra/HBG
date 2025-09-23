@@ -16,9 +16,21 @@ var c = 1;
 var cDispo = c;
 
 const tabMC = [
-    { minValue: 0, maxValue: 50, currentValue: 0, maxWorker: 10, currentWorker: 0, prod: 1 },
-    { minValue: 0, maxValue: 100, currentValue: 0, maxWorker: 25, currentWorker: 0, prod: 5 }
+    { minValue: 0, maxValue: 10, currentValue: 0, maxWorker: 5, currentWorker: 0, prod: 1 },
+    { minValue: 0, maxValue: 100, currentValue: 0, maxWorker: 50, currentWorker: 0, prod: 5 },
+    { minValue: 0, maxValue: 1000, currentValue: 0, maxWorker: 500, currentWorker: 0, prod: 50 },
+    { minValue: 0, maxValue: 10000, currentValue: 0, maxWorker: 5000, currentWorker: 0, prod: 500 },
+    { minValue: 0, maxValue: 100000, currentValue: 0, maxWorker: 50000, currentWorker: 0, prod: 5000 }
 ];
+
+const tabMF = [
+    { minValue: 0, maxValue: 10, currentValue: 0, maxWorker: 1, currentWorker: 0, prod: 1 },
+    { minValue: 0, maxValue: 100, currentValue: 0, maxWorker: 2, currentWorker: 0, prod: 5 },
+    { minValue: 0, maxValue: 1000, currentValue: 0, maxWorker: 3, currentWorker: 0, prod: 50 },
+    { minValue: 0, maxValue: 10000, currentValue: 0, maxWorker: 4, currentWorker: 0, prod: 500 },
+    { minValue: 0, maxValue: 100000, currentValue: 0, maxWorker: 5, currentWorker: 0, prod: 5000 }
+];
+
 
 /////////////////////////////////////////////////
 
@@ -26,9 +38,22 @@ for (let i = 0; i < tabMC.length; i++) {
     document.getElementById("MC_" + i).setAttribute("max", tabMC[i].maxValue);
     document.getElementById("MC_" + i).setAttribute("value", tabMC[i].minValue);
     document.getElementById("MC_" + i + "_Allocated").textContent = tabMC[i].currentWorker;
+    document.getElementById("MC_"+ i + "_maxWorker").textContent = tabMC[i].maxWorker;
 
     document.getElementById("MC_" + i + "_Btn+").onclick = function () { Dispatch(i, "+") };
     document.getElementById("MC_" + i + "_Btn-").onclick = function () { Dispatch(i, "-") };
+
+}
+
+for (let i = 0; i < tabMF.length; i++) {
+    document.getElementById("MF_" + i).setAttribute("max", tabMF[i].maxValue);
+    document.getElementById("MF_" + i).setAttribute("value", tabMF[i].minValue);
+    document.getElementById("MF_" + i + "_Allocated").textContent = tabMF[i].currentWorker;
+    document.getElementById("MF_"+ i + "_maxWorker").textContent = tabMF[i].maxWorker;
+
+    document.getElementById("MF_" + i + "_Btn+").onclick = function () { Dispatch(i, "+") };
+    document.getElementById("MF_" + i + "_Btn-").onclick = function () { Dispatch(i, "-") };
+
 }
 
 /////////////////////////////////////////////////
@@ -53,6 +78,12 @@ function updateDisplay() {
         document.getElementById(`MC_${i}`).setAttribute("value", tabMC[i].currentValue);
         updateElement(`MC_${i}_Allocated`, tabMC[i].currentWorker);
     }
+
+    for (let i = 0; i < tabMF.length; i++) {
+        document.getElementById(`MF_${i}`).setAttribute("value", tabMF[i].currentValue);
+        updateElement(`MF_${i}_Allocated`, tabMF[i].currentWorker);
+    }
+
 }
 
 /**
