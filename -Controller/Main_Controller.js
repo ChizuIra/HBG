@@ -4,10 +4,10 @@ import { acheterUnite } from "../-Model/Model_shop.js";
 //import { MissionProgress } from "../-Model/Model_shop.js";
 
 /*
-    async function init(){
-        const BalanceData = await loadBalanceData();
-        console.log(BalanceData[0]);
-    }
+  async function init(){
+  const BalanceData = await loadBalanceData();
+  console.log(BalanceData[0]);
+  }
 */
 
 // Main ressources
@@ -63,7 +63,7 @@ function MissionProgress(t) {
     for(let currMc of tabMC) {
         currMc.currentValue += currMc.currentWorker * t;
 
-        if(currMc.currentValue < currMc.maxValue) return;
+        if(currMc.currentValue < currMc.maxValue) continue;
 
         c += currMc.prod;
         cDispo += currMc.prod;
@@ -89,25 +89,32 @@ function clamp(min, val, max) {
 function Dispatch(mission, action) {
     var dispatchAmount = +(document.getElementById("dispatchAmount").value);
     let current = tabMC[mission];
+    const OPERATOR = {
+        "+": (x) => +x,
+        "-": (x) => -x,
+    };
+    Object.freeze(OPERATOR);
 
     if(dispatchAmount <= 0) return;
 
-    dispatchAmount = clamp(
-        0,
-        dispatchAmount,
-        current.maxWorker - current.currentWorker
+    let limit = 0;
+    let operator = OPERATOR[action];
+
+    if (action === '+') {
+        limit = Math.min(cDispo, current.maxWorker - current.currentWorker);
+    } else if (action === '-') {
+        limit = current.currentWorker
+    }
+
+    let assignAmount = operator(
+        clamp(
+            0,
+            dispatchAmount,
+            limit
+        )
     );
 
-    switch (action) {
-    case "+":
-	dispatchAmount = Math.min(dispatchAmount, cDispo); // Empeche de suracheter
-	assignWorker(current, dispatchAmount);
-        break;
-    case "-":
-	dispatchAmount = Math.min(dispatchAmount, current.currentWorker); // Empeche de survendre
-	assignWorker(current, -dispatchAmount);
-        break;
-    }
+    assignWorker(current, assignAmount);
 }
 
 updateDisplay(); // Actualise l'interface avant de lancer la boucle.
@@ -119,10 +126,10 @@ setInterval(() => {
 
 
 /* Pour test voirs si les FPS accelere pas la vitesse du jeu
-Buy(Tabunits,F,0,);
-    for(let i=0;i < 120;i++){
-        console.log("["+i+"]");
-        tick(1);
-    }
+   Buy(Tabunits,F,0,);
+   for(let i=0;i < 120;i++){
+   console.log("["+i+"]");
+   tick(1);
+   }
 */
 //Amogus
