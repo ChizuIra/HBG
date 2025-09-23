@@ -1,10 +1,8 @@
 # Comment le gaming wtf (version pour les faibles)
 
-1. Installer VScode
-2. Ajoute le plugin live server
-3. gayming
+Cliquer sur Run.bat pour lancer le jeu
 
-Lance Index.html
+Le .bat exactement la seconde méthode mais juste en 1 clic
 
 # Comment le gaming wtf (version pour les bonhommes)
 
