@@ -1,7 +1,3 @@
-//initialisation du jeu
-import { loadBalanceData } from "../-Model/Model_save.js";
-import { acheterUnite } from "../-Model/Model_shop.js";
-//import { MissionProgress } from "../-Model/Model_shop.js";
 
 /*
   async function init(){
