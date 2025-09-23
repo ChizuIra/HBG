@@ -63,7 +63,7 @@ function MissionProgress(t) {
     for(let currMc of tabMC) {
         currMc.currentValue += currMc.currentWorker * t;
 
-        if(currMc.currentValue < currMc.maxValue) return;
+        if(currMc.currentValue < currMc.maxValue) continue;
 
         c += currMc.prod;
         cDispo += currMc.prod;
