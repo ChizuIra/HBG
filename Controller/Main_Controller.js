@@ -36,8 +36,8 @@ for (let i = 0; i < tabMC.length; i++) {
     document.getElementById("MC_" + i + "_Allocated").textContent = tabMC[i].currentWorker;
     document.getElementById("MC_"+ i + "_maxWorker").textContent = tabMC[i].maxWorker;
 
-    document.getElementById("MC_" + i + "_Btn+").onclick = function () { Dispatch(i, "+") };
-    document.getElementById("MC_" + i + "_Btn-").onclick = function () { Dispatch(i, "-") };
+    document.getElementById("MC_" + i + "_Btn+").onclick = function () { Dispatch(i, "+", "MC") };
+    document.getElementById("MC_" + i + "_Btn-").onclick = function () { Dispatch(i, "-", "MC") };
 
 }
 
@@ -47,8 +47,8 @@ for (let i = 0; i < tabMF.length; i++) {
     document.getElementById("MF_" + i + "_Allocated").textContent = tabMF[i].currentWorker;
     document.getElementById("MF_"+ i + "_maxWorker").textContent = tabMF[i].maxWorker;
 
-    document.getElementById("MF_" + i + "_Btn+").onclick = function () { Dispatch(i, "+") };
-    document.getElementById("MF_" + i + "_Btn-").onclick = function () { Dispatch(i, "-") };
+    document.getElementById("MF_" + i + "_Btn+").onclick = function () { Dispatch(i, "+", "MF") };
+    document.getElementById("MF_" + i + "_Btn-").onclick = function () { Dispatch(i, "-", "MF") };
 
 }
 
@@ -96,6 +96,16 @@ function MissionProgress(t) {
         cDispo += currMc.prod;
         currMc.currentValue = 0;
     }
+    for(let currMF of tabMF) {
+        currMF.currentValue += currMF.currentWorker * t;
+
+        if(currMF.currentValue < currMF.maxValue) continue;
+
+        f += currMF.prod;
+        cDispo += currMF.prod;
+        currMF.currentValue = 0;
+    }
+    
 }
 
 /**
@@ -113,9 +123,10 @@ function clamp(min, val, max) {
  * @param {Number} mission Correspond à la mission sélectionnée (Equivalent à TabMC[i].
  * @param {String} action Soit "+" soit "-", permet d'ajouter ou d'enlever à la mission i
  */
-function Dispatch(mission, action) {
+function Dispatch(mission, action , missionType) {
     var dispatchAmount = +(document.getElementById("dispatchAmount").value);
-    let current = tabMC[mission];
+    if(missionType === 'MC' ){var current = tabMC[mission];}
+    if(missionType === 'MF' ){var current = tabMF[mission];}
     const OPERATOR = {
         "+": (x) => +x,
         "-": (x) => -x,
