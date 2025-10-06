@@ -4,105 +4,50 @@
 <head>
   <meta charset="UTF-8">
   <title>How to become a God</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.grey.min.css">
+  <link rel="stylesheet" href="Style/main.css">
+
 </head>
 
 <body>
 
-  <script type="module" src="Controller/Main_Controller.js"></script>
-
+  <!--<script type="module" src="Controller/Main_Controller.js"></script>--->
   <header>
-    <h1>HBG - How to Become a God</h1>
+    <aside>
+      <nav>
+        <ul>
+          <li><strong>Ressources</strong></li>
+          <li>F : <span id="F">0</span></li>
+          <li>C : <span id="C">0</span> Dispo :<span id="cDispo"></span></li>
 
-    <hgroup>
-      <h3>Ressources</h3>
-      <p>F : <span id="F">0</span></p>
-      <p>C : <span id="C">0</span></p>
-      <p>Croyants Disponible : <span id="cDispo">0</span></p>
-      </dhgroup>
 
-      <div>
-        <label>Selection : </label>
-        <input id="dispatchAmount" type="number" min="0">
-      </div>
+        </ul>
+        <ul>
+          <li><button class="secondary">Missions</button></li>
+          <li><button class="secondary">Ville</button></li>
+          <li><button class="secondary">???</button></li>
+        </ul>
+      </nav>
+    </aside>
   </header>
-  <main class="container">
-    <div class="grid">
-      <div>
-        <div class="grid">
-          <label for="MC_0"> MC 0 </label> <progress id="MC_0" max="0" value="0"></progress>
-          <span id="MC_0_Allocated">0</span> / <span id="MC_0_maxWorker">0</span>
-          <button id="MC_0_Btn+"> + </button> <button id="MC_0_Btn-"> - </button>
-        </div>
 
-        <div class="grid">
-          <label for="MC_1"> MC 1 </label>
-          <progress id="MC_1" max="0" value="0"></progress>
-          <span id="MC_1_Allocated">0</span> / <span id="MC_1_maxWorker">0</span>
-          <button id="MC_1_Btn+"> + </button> <button id="MC_1_Btn-"> - </button>
-        </div>
-        <div class="grid">
-          <label for="MC_2"> MC 2 </label>
-          <progress id="MC_2" max="0" value="0"></progress>
-          <span id="MC_2_Allocated">0</span> / <span id="MC_2_maxWorker">0</span>
-          <button id="MC_2_Btn+"> + </button> <button id="MC_2_Btn-"> - </button>
-        </div>
+  <main class="container" id="app"></main>
 
-        <div class="grid">
-          <label for="MC_3"> MC 3 </label>
-          <progress id="MC_3" max="0" value="0"></progress>
-          <span id="MC_3_Allocated">0</span> / <span id="MC_3_maxWorker">0</span>
-          <button id="MC_3_Btn+"> + </button> <button id="MC_3_Btn-"> - </button>
-        </div>
-
-        <div class="grid">
-          <label for="MC_4"> MC 4 </label>
-          <progress id="MC_4" max="0" value="0"></progress>
-          <span id="MC_4_Allocated">0</span> / <span id="MC_4_maxWorker">0</span>
-          <button id="MC_4_Btn+"> + </button> <button id="MC_4_Btn-"> - </button>
-        </div>
-      </div>
-
-      <div>
-        <div class="grid">
-          <label for="MF_0"> MF 0 </label> <progress id="MF_0" max="0" value="0"></progress>
-          <span id="MF_0_Allocated">0</span> / <span id="MF_0_maxWorker">0</span>
-          <button id="MF_0_Btn+"> + </button> <button id="MF_0_Btn-"> - </button>
-        </div>
-
-        <div class="grid">
-          <label for="MF_1"> MF 1 </label>
-          <progress id="MF_1" max="0" value="0"></progress>
-          <span id="MF_1_Allocated">0</span> / <span id="MF_1_maxWorker">0</span>
-          <button id="MF_1_Btn+"> + </button> <button id="MF_1_Btn-"> - </button>
-        </div>
-        <div class="grid">
-          <label for="MF_2"> MF 2 </label>
-          <progress id="MF_2" max="0" value="0"></progress>
-          <span id="MF_2_Allocated">0</span> / <span id="MF_2_maxWorker">0</span>
-          <button id="MF_2_Btn+"> + </button> <button id="MF_2_Btn-"> - </button>
-        </div>
-
-        <div class="grid">
-          <label for="MF_3"> MF 3 </label>
-          <progress id="MF_3" max="0" value="0"></progress>
-          <span id="MF_3_Allocated">0</span> / <span id="MF_3_maxWorker">0</span>
-          <button id="MF_3_Btn+"> + </button> <button id="MF_3_Btn-"> - </button>
-        </div>
-
-        <div class="grid">
-          <label for="MF_4"> MF 4 </label>
-          <progress id="MF_4" max="0" value="0"></progress>
-          <span id="MF_4_Allocated">0</span> / <span id="MF_4_maxWorker">0</span>
-          <button id="MF_4_Btn+"> + </button> <button id="MF_4_Btn-"> - </button>
-        </div>
-      </div>
-
-    </div>
-  </main>
   <footer>
 
   </footer>
+
+  <script type="module">
+    import { Mission_Vue } from "./Vue/Mission_Vue.js";
+    let vue = new Mission_Vue();
+    let inter_ms = 1000 * 1 / 60; // 60 fps
+    document.getElementById("app").innerHTML = vue.initVue();
+    setInterval(() => {
+      document.getElementById("app.mission").innerHTML = vue.updateVue();
+    }, inter_ms);
+
+
+  </script>
 </body>
 
 </html>

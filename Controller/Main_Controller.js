@@ -1,112 +1,24 @@
+import { MissionProgress,tabMC,tabMF,f,c,cDispo } from "../Model/Mission_Model.js";
 
-/*
-  async function init(){
-  const BalanceData = await loadBalanceData();
-  console.log(BalanceData[0]);
-  }
-*/
-
-// Main ressources
-var f = 0;
-var c = 1;
-var cDispo = c;
-
-const tabMC = [
-    { minValue: 0, maxValue: 10, currentValue: 0, maxWorker: 5, currentWorker: 0, prod: 1 },
-    { minValue: 0, maxValue: 100, currentValue: 0, maxWorker: 50, currentWorker: 0, prod: 5 },
-    { minValue: 0, maxValue: 1000, currentValue: 0, maxWorker: 500, currentWorker: 0, prod: 50 },
-    { minValue: 0, maxValue: 10000, currentValue: 0, maxWorker: 5000, currentWorker: 0, prod: 500 },
-    { minValue: 0, maxValue: 100000, currentValue: 0, maxWorker: 50000, currentWorker: 0, prod: 5000 }
-];
-
-const tabMF = [
-    { minValue: 0, maxValue: 10, currentValue: 0, maxWorker: 1, currentWorker: 0, prod: 1 },
-    { minValue: 0, maxValue: 100, currentValue: 0, maxWorker: 2, currentWorker: 0, prod: 5 },
-    { minValue: 0, maxValue: 1000, currentValue: 0, maxWorker: 3, currentWorker: 0, prod: 50 },
-    { minValue: 0, maxValue: 10000, currentValue: 0, maxWorker: 4, currentWorker: 0, prod: 500 },
-    { minValue: 0, maxValue: 100000, currentValue: 0, maxWorker: 5, currentWorker: 0, prod: 5000 }
-];
 
 
 /////////////////////////////////////////////////
-
-for (let i = 0; i < tabMC.length; i++) {
-    document.getElementById("MC_" + i).setAttribute("max", tabMC[i].maxValue);
-    document.getElementById("MC_" + i).setAttribute("value", tabMC[i].minValue);
-    document.getElementById("MC_" + i + "_Allocated").textContent = tabMC[i].currentWorker;
-    document.getElementById("MC_"+ i + "_maxWorker").textContent = tabMC[i].maxWorker;
-
-    document.getElementById("MC_" + i + "_Btn+").onclick = function () { Dispatch(i, "+", "MC") };
-    document.getElementById("MC_" + i + "_Btn-").onclick = function () { Dispatch(i, "-", "MC") };
-
-}
-
-for (let i = 0; i < tabMF.length; i++) {
-    document.getElementById("MF_" + i).setAttribute("max", tabMF[i].maxValue);
-    document.getElementById("MF_" + i).setAttribute("value", tabMF[i].minValue);
-    document.getElementById("MF_" + i + "_Allocated").textContent = tabMF[i].currentWorker;
-    document.getElementById("MF_"+ i + "_maxWorker").textContent = tabMF[i].maxWorker;
-
-    document.getElementById("MF_" + i + "_Btn+").onclick = function () { Dispatch(i, "+", "MF") };
-    document.getElementById("MF_" + i + "_Btn-").onclick = function () { Dispatch(i, "-", "MF") };
-
-}
-
-/////////////////////////////////////////////////
-
-function assignWorker(ressource, quantity) {
-    ressource.currentWorker += quantity;
-    cDispo -= quantity;
-}
 
 function updateElement(id, value) {
     document.getElementById(id).textContent = value;
 }
 
+/**
+ * Fonction qui actualise l'affichage
+ */
 function updateDisplay() {
     // Actualisation des Ressources
     updateElement("C",      Math.floor(c));
     updateElement("cDispo", Math.floor(cDispo));
     updateElement("F",      f.toFixed(2));
 
-    // for (let i = 0; i < Tabunits.length; i++ ) {
-    for (let i = 0; i < tabMC.length; i++) {
-        document.getElementById(`MC_${i}`).setAttribute("value", tabMC[i].currentValue);
-        updateElement(`MC_${i}_Allocated`, tabMC[i].currentWorker);
-    }
-
-    for (let i = 0; i < tabMF.length; i++) {
-        document.getElementById(`MF_${i}`).setAttribute("value", tabMF[i].currentValue);
-        updateElement(`MF_${i}_Allocated`, tabMF[i].currentWorker);
-    }
-
 }
 
-/**
- * Fonction permettant de calculer l'avancement des missions
- * @param {Number} t Nombre utilisé pour représenté le pas de temps depuis la dernière update
- */
-function MissionProgress(t) {
-    for(let currMc of tabMC) {
-        currMc.currentValue += currMc.currentWorker * t;
-
-        if(currMc.currentValue < currMc.maxValue) continue;
-
-        c += currMc.prod;
-        cDispo += currMc.prod;
-        currMc.currentValue = 0;
-    }
-    for(let currMF of tabMF) {
-        currMF.currentValue += currMF.currentWorker * t;
-
-        if(currMF.currentValue < currMF.maxValue) continue;
-
-        f += currMF.prod;
-        cDispo += currMF.prod;
-        currMF.currentValue = 0;
-    }
-    
-}
 
 /**
  * Permet de restreindre une valeur entre 2 nombres
@@ -122,8 +34,10 @@ function clamp(min, val, max) {
  * Permet d'attribuer à la mission correspondante la valeur sélectionnée (+ ou -)
  * @param {Number} mission Correspond à la mission sélectionnée (Equivalent à TabMC[i].
  * @param {String} action Soit "+" soit "-", permet d'ajouter ou d'enlever à la mission i
+ * @param {String} missionType Soit "MC" soit "MF" , definis sur qu'elle liste de mission on travail
  */
-function Dispatch(mission, action , missionType) {
+export function Dispatch(mission, action , missionType) {
+    console.log("BtnClicked");
     var dispatchAmount = +(document.getElementById("dispatchAmount").value);
     if(missionType === 'MC' ){var current = tabMC[mission];}
     if(missionType === 'MF' ){var current = tabMF[mission];}
@@ -135,14 +49,9 @@ function Dispatch(mission, action , missionType) {
 
     if(dispatchAmount <= 0) return;
 
-    let limit = 0;
     let operator = OPERATOR[action];
 
-    if (action === '+') {
-        limit = Math.min(cDispo, current.maxWorker - current.currentWorker);
-    } else if (action === '-') {
-        limit = current.currentWorker
-    }
+    let limit = current.getLimit(action);
 
     let assignAmount = operator(
         clamp(
@@ -152,8 +61,9 @@ function Dispatch(mission, action , missionType) {
         )
     );
 
-    assignWorker(current, assignAmount);
+    current.assignWorker(assignAmount);
 }
+
 
 updateDisplay(); // Actualise l'interface avant de lancer la boucle.
 let inter_ms = 1000 * 1/60; // 60 fps

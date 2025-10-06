@@ -1,6 +1,3 @@
-.grid {
-
-}
-
-.grid div{
+body{
+    display:flex;   
 }
