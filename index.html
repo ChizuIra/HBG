@@ -10,9 +10,7 @@
 </head>
 
 <body>
-
-  <!--<script type="module" src="Controller/Main_Controller.js"></script>--->
-  <header>
+  <header> <!--faire NavBar_Vue.js-->
     <aside>
       <nav>
         <ul>
@@ -33,17 +31,21 @@
 
   <main class="container" id="app"></main>
 
-  <footer>
+  <footer> <!---feet?-->
 
   </footer>
 
   <script type="module">
     import { Mission_Vue } from "./Vue/Mission_Vue.js";
+    import {Dispatch} from "./Controller/Main_Controller.js";
+    
     let vue = new Mission_Vue();
-    let inter_ms = 1000 * 1 / 60; // 60 fps
+    let inter_ms = 1000 * 1/60;; // 60 fps
+    
     document.getElementById("app").innerHTML = vue.initVue();
+    vue.optionVue();
     setInterval(() => {
-      document.getElementById("app.mission").innerHTML = vue.updateVue();
+      vue.updateVue();
     }, inter_ms);
 
 

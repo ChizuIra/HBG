@@ -12,20 +12,20 @@ export class Mission_Vue{
     createProgress(M,i,Mission){
         return `<progress id='${M}_${i}' max ='100' value='${Mission.getPourcentValue()}'></progress>`;
     }
-    createSpan(info){
-        return `<span> ${info} </span>`;
+    createSpan(id,info){
+        return `<span id='${id}'> ${info} </span>`;
     }
     createBtn(M,i,operator){
-        return `<button id='${M}_${i}_Btn${operator}' >${operator}</button>`;
+        return `<button id='${M}_${i}_Btn${operator}'>${operator}</button>`;
     }
-
+//<button onclick="Dispatch()" />
     createMission(M,tab){
         let string = "";
         for (let i = 0; i < tab.length; i++){
             string += "<div class='grid'>";
             string += this.createLabel(M,i,tab[i]);
             string += this.createProgress(M,i,tab[i]);
-            string += this.createSpan(tab[i].getCurrentWorker()) + "/" + this.createSpan(tab[i].getMaxWorker());
+            string += this.createSpan(`${M}_${i}_currentWorker`,"0") + "/" + this.createSpan(`${M}_${i}_maxWorker`,"0");
             string += this.createBtn(M,i,"+") + this.createBtn(M,i,"-");
             string += "</div>";
         }
@@ -33,7 +33,6 @@ export class Mission_Vue{
     }
 
     initVue(){
-        console.log("initVue");
         let string = "";
         string += this.createSelectAmount();
         string += "<hr>";
@@ -46,13 +45,18 @@ export class Mission_Vue{
     }
 
     updateVue(){
-        console.log("updateVue");
-        let string = "";
-        string += this.createMission("MC", tabMC);
-        string += "<hr>";
-        string += this.createMission("MF", tabMF);
-        //string += this.optionVue()
-        return string;
+        tabMC.forEach((e,i) =>{document.getElementById(`MC_${i}`).value = e.getPourcentValue()});
+        tabMF.forEach((e,i) =>{document.getElementById(`MF_${i}`).value = e.getPourcentValue()});
+
+        for (let i = 0; i < tabMC.length; i++){
+            document.getElementById(`MC_${i}_currentWorker`).innerHTML = tabMC[i].getCurrentWorker();
+            document.getElementById(`MC_${i}_maxWorker`).innerHTML = tabMC[i].getMaxWorker();
+        }
+
+        for (let i = 0; i < tabMF.length; i++){
+            document.getElementById(`MF_${i}_currentWorker`).innerHTML = tabMF[i].getCurrentWorker();
+            document.getElementById(`MF_${i}_maxWorker`).innerHTML = tabMF[i].getMaxWorker();
+        }
     }
 
     optionVue(){
@@ -61,15 +65,10 @@ export class Mission_Vue{
     }
 
     initBtn(M,tab){
-        let string ="";
-        string += "<script>"
-        string += "import { Dispatch } from '../Controller/Main_Controller.js';"
         for (let i = 0; i < tab.length; i++){
-            string += `document.getElementById('${M}_${i}_Btn+').onclick = function () { Dispatch(i, '+', M) };`; // ya un probleme dans ton appel ici (Hapax-sensei)
-            string += `document.getElementById('${M}_${i}_Btn-').onclick = function () { Dispatch(i, '-', M) };`;
+            document.getElementById(`${M}_${i}_Btn+`).onclick = function () { Dispatch(i, '+', M) }; 
+            document.getElementById(`${M}_${i}_Btn-`).onclick = function () { Dispatch(i, '-', M) };
         }
-        string +="</script>"
-        return string;
     }
 
 }

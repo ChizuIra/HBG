@@ -37,7 +37,6 @@ function clamp(min, val, max) {
  * @param {String} missionType Soit "MC" soit "MF" , definis sur qu'elle liste de mission on travail
  */
 export function Dispatch(mission, action , missionType) {
-    console.log("BtnClicked");
     var dispatchAmount = +(document.getElementById("dispatchAmount").value);
     if(missionType === 'MC' ){var current = tabMC[mission];}
     if(missionType === 'MF' ){var current = tabMF[mission];}
