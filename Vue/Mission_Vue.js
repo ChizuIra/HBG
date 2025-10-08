@@ -1,45 +1,32 @@
 import {Mission,f,c,cDispo,tabMC,tabMF} from "../Model/Mission_Model.js";
 import {Dispatch} from "../Controller/Main_Controller.js";
+import { Base_Vue } from "./Base_Vue.js";
 
-export class Mission_Vue{
-    createSelectAmount(){
-        return  `<label>Selection : </label><input id='dispatchAmount' type='number' min = '0'>`  
-    }
+export class Mission_Vue extends Base_Vue{
 
-    createLabel(M,i){  
-        return `<label for ='${M}_${i}'> ${M}_${i} </label>`;
-    }
-    createProgress(M,i,Mission){
-        return `<progress id='${M}_${i}' max ='100' value='${Mission.getPourcentValue()}'></progress>`;
-    }
-    createSpan(id,info){
-        return `<span id='${id}'> ${info} </span>`;
-    }
-    createBtn(M,i,operator){
-        return `<button id='${M}_${i}_Btn${operator}'>${operator}</button>`;
-    }
 //<button onclick="Dispatch()" />
     createMission(M,tab){
         let string = "";
         for (let i = 0; i < tab.length; i++){
             string += "<div class='grid'>";
-            string += this.createLabel(M,i,tab[i]);
-            string += this.createProgress(M,i,tab[i]);
+            string += this.createLabel(`${M}_${i}`);
+            string += this.createProgress(`${M}_${i}`,`${tab[i].getPourcentValue()}`);
             string += this.createSpan(`${M}_${i}_currentWorker`,"0") + "/" + this.createSpan(`${M}_${i}_maxWorker`,"0");
-            string += this.createBtn(M,i,"+") + this.createBtn(M,i,"-");
+            string += this.createBtn(`${M}_${i}_Btn+`,"+","") + this.createBtn(`${M}_${i}_Btn-`,"-","");
             string += "</div>";
         }
         return string;
     }
 
     initVue(){
-        let string = "";
-        string += this.createSelectAmount();
+        let string = "<div class='pico'>";
+        string += this.createSelectAmount("Selection :","dispatchAmount");
         string += "<hr>";
         string += "<div id='app.mission'>"
         string += this.createMission("MC", tabMC);
         string += "<hr>";
         string += this.createMission("MF", tabMF);
+        string += "</div>"
         string += "</div>"
         return string;
     }

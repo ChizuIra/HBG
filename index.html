@@ -4,52 +4,38 @@
 <head>
   <meta charset="UTF-8">
   <title>How to become a God</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.grey.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.grey.min.css">
   <link rel="stylesheet" href="Style/main.css">
 
 </head>
 
 <body>
-  <header> <!--faire NavBar_Vue.js-->
-    <aside>
-      <nav>
-        <ul>
-          <li><strong>Ressources</strong></li>
-          <li>F : <span id="F">0</span></li>
-          <li>C : <span id="C">0</span> Dispo :<span id="cDispo"></span></li>
-
-
-        </ul>
-        <ul>
-          <li><button class="secondary">Missions</button></li>
-          <li><button class="secondary">Ville</button></li>
-          <li><button class="secondary">???</button></li>
-        </ul>
-      </nav>
-    </aside>
-  </header>
+  <header id="app.header" class="pico"></header>
 
   <main class="container" id="app"></main>
 
-  <footer> <!---feet?-->
-
-  </footer>
+  <footer id="app.footer"></footer>
 
   <script type="module">
     import { Mission_Vue } from "./Vue/Mission_Vue.js";
+    import { Menu_Vue } from "./Vue/Menu_Vue.js";
     import {Dispatch} from "./Controller/Main_Controller.js";
     
-    let vue = new Mission_Vue();
-    let inter_ms = 1000 * 1/60;; // 60 fps
+    let vue_Menu = new Menu_Vue();
+    document.getElementById("app.header").innerHTML = vue_Menu.initVue();
+    vue_Menu.optionVue();
     
-    document.getElementById("app").innerHTML = vue.initVue();
-    vue.optionVue();
+    let vue_Mission = new Mission_Vue();
+    document.getElementById("app").innerHTML = vue_Mission.initVue();
+    vue_Mission.optionVue();
+
+    let inter_ms = 1000 * 1/60;; // 60 fps
     setInterval(() => {
-      vue.updateVue();
+      vue_Mission.updateVue();
+      vue_Menu.updateVue();
     }, inter_ms);
 
 
   </script>
 </body>
-
 </html>

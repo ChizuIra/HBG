@@ -3,23 +3,6 @@ import { MissionProgress,tabMC,tabMF,f,c,cDispo } from "../Model/Mission_Model.j
 
 
 /////////////////////////////////////////////////
-
-function updateElement(id, value) {
-    document.getElementById(id).textContent = value;
-}
-
-/**
- * Fonction qui actualise l'affichage
- */
-function updateDisplay() {
-    // Actualisation des Ressources
-    updateElement("C",      Math.floor(c));
-    updateElement("cDispo", Math.floor(cDispo));
-    updateElement("F",      f.toFixed(2));
-
-}
-
-
 /**
  * Permet de restreindre une valeur entre 2 nombres
  * @param{Number} Borne inférieur de la range
@@ -64,10 +47,8 @@ export function Dispatch(mission, action , missionType) {
 }
 
 
-updateDisplay(); // Actualise l'interface avant de lancer la boucle.
 let inter_ms = 1000 * 1/60; // 60 fps
 setInterval(() => {
-    updateDisplay();
     MissionProgress(inter_ms / 1000.0);
 }, inter_ms);
 
