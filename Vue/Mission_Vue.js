@@ -1,5 +1,5 @@
-import {Mission,f,c,cDispo,tabMC,tabMF} from "../Model/Mission_Model.js";
-import {Dispatch} from "../Controller/Main_Controller.js";
+import {tabMC,tabMF,} from "../Model/Mission_Model.js";
+import {Dispatch,} from "../Controller/Main_Controller.js";
 import { Base_Vue } from "./Base_Vue.js";
 
 export class Mission_Vue extends Base_Vue{
@@ -12,7 +12,7 @@ export class Mission_Vue extends Base_Vue{
             string += this.createLabel(`${M}_${i}`);
             string += this.createProgress(`${M}_${i}`,`${tab[i].getPourcentValue()}`);
             string += this.createSpan(`${M}_${i}_currentWorker`,"0") + "/" + this.createSpan(`${M}_${i}_maxWorker`,"0");
-            string += this.createBtn(`${M}_${i}_Btn+`,"+","") + this.createBtn(`${M}_${i}_Btn-`,"-","");
+            string += this.createBtn(`${M}_${i}_Btn+`,"+","") + this.createBtn(`${M}_${i}_Btn-`,"-","") + this.createBtn(`${M}_${i}_upgradeMaxWorker`,"⬆");
             string += "</div>";
         }
         return string;
@@ -55,6 +55,7 @@ export class Mission_Vue extends Base_Vue{
         for (let i = 0; i < tab.length; i++){
             document.getElementById(`${M}_${i}_Btn+`).onclick = function () { Dispatch(i, '+', M) }; 
             document.getElementById(`${M}_${i}_Btn-`).onclick = function () { Dispatch(i, '-', M) };
+            document.getElementById(`${M}_${i}_upgradeMaxWorker`).onclick = function () { tab[i].UpgradeMaxWorker(tab[i],M) };
         }
     }
 

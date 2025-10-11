@@ -1,4 +1,4 @@
-export var f = 0;
+export var f = 50;
 export var c = 1;
 export var cDispo = c;
 
@@ -6,10 +6,11 @@ export class Mission {
     constructor(minValue, maxValue, maxWorker, prod) {
         this._minValue = minValue; // pas de get
         this._maxValue = maxValue; // pas de get
-        this._maxWorker = maxWorker;  
+        this._maxWorker = maxWorker;
         this._prod = prod; // pas de get
-        this._currentValue = minValue;  
+        this._currentValue = minValue;
         this._currentWorker = 0;
+        this._upgrade = 0;
     }
     /**
      * @param {Number} quantity 
@@ -26,12 +27,12 @@ export class Mission {
         return this._currentValue;
     }
 
-    getMaxWorker(){
+    getMaxWorker() {
         return this._maxWorker;
     }
 
-    getPourcentValue(){
-        return 100*this._currentValue / (this._maxValue-this._minValue);
+    getPourcentValue() {
+        return 100 * this._currentValue / (this._maxValue - this._minValue);
     }
 
     workProd(time) {
@@ -47,21 +48,44 @@ export class Mission {
             return this._currentWorker;
         }
     }
+
+    UpgradeMaxWorker() {
+        let upgradeCost = 5 * 1.6 ^this._upgrade;
+        if (f < upgradeCost) return;
+        f -= upgradeCost;
+        this._upgrade += 1;
+        this._maxWorker += this._upgrade;
+
+        console.log("Cost : " + upgradeCost);
+        console.log("upgrade : " + this._upgrade );
+        console.log("maxWorker : " + this._maxWorker );
+        console.log("--------" );
+
+
+    }
 }
 
 export const tabMC = [
     // minValue , maxValue , maxWorker , prod
-    new Mission(0, 10, 1, 1),
-    new Mission(0, 100, 5, 1),
-    new Mission(0, 500, 10, 1),
-    new Mission(0, 1000, 30, 1)
+    new Mission(0, 10, 5, 1),
+    new Mission(0, 10, 7, 1),
+    new Mission(0, 10, 9, 1),
+    new Mission(0, 10, 11, 1),
+    new Mission(0, 10, 13, 1),
+    new Mission(0, 10, 15, 1),
+    new Mission(0, 10, 17, 1),
+    new Mission(0, 10, 19, 1)
 ];
 
 export const tabMF = [
-    new Mission(0, 10, 1, 1),
-    new Mission(0, 100, 5, 1),
-    new Mission(0, 500, 10, 1),
-    new Mission(0, 1000, 30, 1)
+    new Mission(0, 10, 5, 1),
+    new Mission(0, 10, 7, 3),
+    new Mission(0, 10, 9, 10),
+    new Mission(0, 10, 11, 33),
+    new Mission(0, 10, 13, 110),
+    new Mission(0, 10, 15, 360),
+    new Mission(0, 10, 17, 1200),
+    new Mission(0, 10, 19, 3960)
 ];
 
 
